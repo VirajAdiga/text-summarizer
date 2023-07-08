@@ -1,24 +1,31 @@
-from transformers import pipeline
+from transformers import T5ForConditionalGeneration, T5Tokenizer
+from loguru import logger
 
 
 class Summarizer:
-    model_name = "sshleifer/distilbart-cnn-12-6"
-    model_revision = "a4f8f3e"
-    task = "summarization"
-    summarizer_max_length = 150
-    summarizer_min_length = 30
-
     def get_summarized_text(self, text_to_be_summarized):
         return self._get_summarized_text(text_to_be_summarized)
 
     def _get_summarized_text(self, text_to_be_summarized):
         # Use the summarization pipeline with the specified model
-        summarizer = pipeline(self.task, model=self.model_name, revision=self.model_revision)
+        logger.info("Setting up the pipeline to summarize the text")
 
-        # Generate the summary
-        summary = summarizer(text_to_be_summarized, max_length=self.summarizer_max_length, min_length=self.summarizer_min_length, do_sample=False)
+        model = T5ForConditionalGeneration.from_pretrained("t5-base")
 
-        # Extract the summarized text
-        summarized_text = summary[0]['summary_text']
+        # initialize the model tokenizer
+        tokenizer = T5Tokenizer.from_pretrained("t5-base")
 
-        return summarized_text
+        # encode the text into tensor of integers using the appropriate tokenizer
+        inputs = tokenizer.encode("summarize: " + text_to_be_summarized, return_tensors="pt", max_length=512, truncation=True)
+
+        # generate the summarization output
+        logger.info("Generating the summary")
+        outputs = model.generate(
+            inputs,
+            max_length=len(text_to_be_summarized)//8,
+            min_length=len(text_to_be_summarized)//16,
+            length_penalty=2.0,
+            num_beams=4,
+            early_stopping=True)
+        logger.info("Summary is ready to be picked up")
+        return tokenizer.decode(outputs[0])
