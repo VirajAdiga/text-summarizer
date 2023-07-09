@@ -27,5 +27,5 @@ def main(page_url):
 
 
 if __name__ == "__main__":
-    url = "https://jamesclear.com/five-step-creative-process"
+    url = "https://jamesclear.com/saying-no"
     main(url)
