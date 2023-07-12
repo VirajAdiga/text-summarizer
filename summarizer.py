@@ -43,7 +43,6 @@ class Summarizer:
         sum_values = 0
         for entry in sentence_value:
             sum_values += sentence_value[entry]
-        # Average value of a sentence from original text
         average = int(sum_values / len(sentence_value))
         return average
 
@@ -54,15 +53,11 @@ class Summarizer:
                 summary += " " + sentence
         return summary
 
-    def get_summarized_text(self, text_to_be_summarized):
-        return self._get_summarized_text(text_to_be_summarized)
-
     def _get_summarized_text(self, text_to_be_summarized):
 
         # 0 Cleaning the data
         logger.info("Cleaning the data")
-        text_to_be_summarized = re.sub(r"[^a-zA-Z0-9\s.]", "", text_to_be_summarized)
-        # return text_to_be_summarized
+        text_to_be_summarized = re.sub(r"[^a-zA-Z0-9\s.,]", "", text_to_be_summarized)
 
         # 1 Create the word frequency table
         logger.info("Creating frequency table")
@@ -72,7 +67,7 @@ class Summarizer:
         logger.info("Tokenizing sentences")
         sentences = sent_tokenize(text_to_be_summarized)
 
-        # 3 Important Algorithm: score the sentences
+        # 3 Score the sentences
         logger.info("Scoring sentences")
         sentence_scores = self._score_sentences(sentences, freq_table)
 
@@ -80,9 +75,12 @@ class Summarizer:
         logger.info("Finding the threshold")
         threshold = self._find_average_score(sentence_scores)
 
-        # 5 Important Algorithm: Generate the summary
+        # 5 Generate the summary
         logger.info("Generating summary")
-        summary = self._generate_summary(sentences, sentence_scores, 1.5 * threshold)
+        summary = self._generate_summary(sentences, sentence_scores, threshold)
         logger.info("Summary is ready to be picked up")
 
         return summary.lstrip().rstrip()
+
+    def get_summarized_text(self, text_to_be_summarized):
+        return self._get_summarized_text(text_to_be_summarized)

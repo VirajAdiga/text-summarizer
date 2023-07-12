@@ -15,4 +15,4 @@ class Scraper:
         logger.info(f"Extracting the response")
         g.close()
         logger.info(f"Article cleaned data is available")
-        return article.cleaned_text.lstrip().rstrip().strip().replace("\n", "")
+        return article.cleaned_text.lstrip().rstrip().strip().replace("\n", " ")
