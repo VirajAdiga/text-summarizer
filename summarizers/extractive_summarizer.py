@@ -6,8 +6,13 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 
 from loguru import logger
 
+from base.summarizer import Summarizer
 
-class Summarizer:
+
+class ExtractiveSummarizer(Summarizer):
+    """
+    Concrete summarizer using nltk
+    """
 
     def _create_frequency_table(self, text_string):
         stop_words = set(stopwords.words("english"))
@@ -53,7 +58,7 @@ class Summarizer:
                 summary += " " + sentence
         return summary
 
-    def _get_summarized_text(self, text_to_be_summarized):
+    def get_summarized_text(self, text_to_be_summarized):
 
         # 0 Cleaning the data
         logger.info("Cleaning the data")
@@ -81,6 +86,3 @@ class Summarizer:
         logger.info("Summary is ready to be picked up")
 
         return summary.lstrip().rstrip()
-
-    def get_summarized_text(self, text_to_be_summarized):
-        return self._get_summarized_text(text_to_be_summarized)
