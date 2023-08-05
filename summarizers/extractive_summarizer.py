@@ -30,6 +30,16 @@ class ExtractiveSummarizer(Summarizer):
                 freq_table[word] = 1
         return freq_table
 
+    def _filter_out_duplicate_sentences(self, sentences):
+        processed_sentences = set()
+        non_duplicate_sentences = []
+        for sentence in sentences:
+            if sentence.lower() in processed_sentences:
+                continue
+            non_duplicate_sentences.append(sentence)
+            processed_sentences.add(sentence.lower())
+        return non_duplicate_sentences
+
     def _score_sentences(self, sentences, freq_table):
         sentence_value = dict()
         for sentence in sentences:
@@ -72,15 +82,19 @@ class ExtractiveSummarizer(Summarizer):
         logger.info("Tokenizing sentences")
         sentences = sent_tokenize(text_to_be_summarized)
 
-        # 3 Score the sentences
+        # 3 Filter out duplicate sentences
+        logger.info("Filtering out duplicate sentences")
+        sentences = self._filter_out_duplicate_sentences(sentences)
+
+        # 4 Score the sentences
         logger.info("Scoring sentences")
         sentence_scores = self._score_sentences(sentences, freq_table)
 
-        # 4 Find the threshold
+        # 5 Find the threshold
         logger.info("Finding the threshold")
         threshold = self._find_average_score(sentence_scores)
 
-        # 5 Generate the summary
+        # 6 Generate the summary
         logger.info("Generating summary")
         summary = self._generate_summary(sentences, sentence_scores, threshold)
         logger.info("Summary is ready to be picked up")
