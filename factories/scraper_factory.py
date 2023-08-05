@@ -1,4 +1,5 @@
 from scrapers.goose_scraper import GooseScraper
+from scrapers.trafilatura_scraper import TrafilaturaScraper
 
 
 class ScraperFactory:
@@ -9,7 +10,8 @@ class ScraperFactory:
     @staticmethod
     def get_scraper(scraper_type):
         scraper_map = {
-            "goose": GooseScraper
+            "goose": GooseScraper,
+            "trafilatura": TrafilaturaScraper
         }
 
         if scraper_type not in scraper_map:
