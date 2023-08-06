@@ -16,5 +16,4 @@ class GooseScraper(Scraper):
         article = g.extract(url=url)
         logger.info(f"Extracting the response")
         g.close()
-        logger.info(f"Article cleaned data is available")
-        return article.cleaned_text.lstrip().rstrip().strip().replace("\n", " ")
+        return self._clean_data(article.cleaned_text)

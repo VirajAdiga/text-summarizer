@@ -12,9 +12,7 @@ class NewspaperScraper(Scraper):
     def scrape_get_text_from_page(self, url):
         logger.info(f"Sending request to page '{url}'")
         article = Article(url)
+        logger.info(f"Extracting the response")
         article.download()
         article.parse()
-        logger.info(f"Extracting the response")
-        article = article.text
-        logger.info(f"Article cleaned data is available")
-        return article.lstrip().rstrip().strip().replace("\n", " ")
+        return self._clean_data(article.text)

@@ -15,5 +15,4 @@ class TrafilaturaScraper(Scraper):
         downloaded = trafilatura.fetch_url(url)
         logger.info(f"Extracting the response")
         downloaded = trafilatura.extract(downloaded)
-        logger.info(f"Article cleaned data is available")
-        return downloaded.lstrip().rstrip().strip().replace("\n", " ")
+        return self._clean_data(downloaded)
