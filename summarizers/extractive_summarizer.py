@@ -14,6 +14,9 @@ class ExtractiveSummarizer(Summarizer):
     Concrete summarizer using nltk
     """
 
+    def __init__(self):
+        self._max_length_of_summary = 450
+
     def _create_frequency_table(self, text_string):
         stop_words = set(stopwords.words("english"))
         words = word_tokenize(text_string)
@@ -61,10 +64,12 @@ class ExtractiveSummarizer(Summarizer):
         average = int(sum_values / len(sentence_value))
         return average
 
-    def _generate_summary(self, sentences, sentence_value, threshold):
+    def _generate_summary(self, sentences, sentence_value, threshold, max_length_of_summary):
         summary = ''
         for sentence in sentences:
-            if sentence[:10] in sentence_value and sentence_value[sentence[:10]] > threshold:
+            if len(summary) >= max_length_of_summary:
+                break
+            if sentence[:10] in sentence_value and sentence_value[sentence[:10]] >= threshold:
                 summary += " " + sentence
         return summary
 
@@ -94,9 +99,12 @@ class ExtractiveSummarizer(Summarizer):
         logger.info("Finding the threshold")
         threshold = self._find_average_score(sentence_scores)
 
-        # 6 Generate the summary
+        # 6 Sorting sentence scores to restrict maximum length of summary
+        sentence_scores = dict(sorted(sentence_scores.items(), key=lambda x: x[1], reverse=True))
+
+        # 7 Generate the summary
         logger.info("Generating summary")
-        summary = self._generate_summary(sentences, sentence_scores, threshold)
+        summary = self._generate_summary(sentences, sentence_scores, threshold, self._max_length_of_summary)
         logger.info("Summary is ready to be picked up")
 
         return summary.lstrip().rstrip()
