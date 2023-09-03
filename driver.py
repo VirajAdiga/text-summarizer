@@ -8,7 +8,7 @@ from factories.summarizer_factory import SummarizerFactory
 
 class Driver:
 
-    def get_summary_of_page(self, page_url, scraper_type="goose", summarizer_type="extractive", max_length=None):
+    def get_summary_of_page(self, page_url, scraper_type="goose", summarizer_type="transformers", max_length=None):
         logger.info(f"Received request for scraping and summarising content from page '{page_url}'")
         logger.info(f"Requested scraper type - {scraper_type}, summarizer type - {summarizer_type}")
 

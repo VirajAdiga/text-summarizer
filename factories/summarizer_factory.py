@@ -1,5 +1,6 @@
 from summarizers.extractive_summarizer import ExtractiveSummarizer
 from summarizers.textrank_summarizer import TextrankSummarizer
+from summarizers.transformer_summarizer import TransformersSummarizer
 
 
 class SummarizerFactory:
@@ -11,7 +12,8 @@ class SummarizerFactory:
     def get_summarizer(summarizer_type):
         summarizer_map = {
             "extractive": ExtractiveSummarizer,
-            "textrank": TextrankSummarizer
+            "textrank": TextrankSummarizer,
+            "transformers": TransformersSummarizer
         }
 
         if summarizer_type not in summarizer_map:
