@@ -7,5 +7,5 @@ class Summarizer(ABC):
     """
 
     @abstractmethod
-    def get_summarized_text(self, text_to_be_summarized):
+    def get_summarized_text(self, text_to_be_summarized, max_length=None):
         raise NotImplementedError

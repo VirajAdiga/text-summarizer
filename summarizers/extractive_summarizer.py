@@ -67,13 +67,13 @@ class ExtractiveSummarizer(Summarizer):
     def _generate_summary(self, sentences, sentence_value, threshold, max_length_of_summary):
         summary = ''
         for sentence in sentences:
-            if len(summary) >= max_length_of_summary:
+            if max_length_of_summary and len(summary) >= max_length_of_summary:
                 break
             if sentence[:10] in sentence_value and sentence_value[sentence[:10]] >= threshold:
                 summary += " " + sentence
         return summary
 
-    def get_summarized_text(self, text_to_be_summarized):
+    def get_summarized_text(self, text_to_be_summarized, max_length=None):
 
         # 0 Cleaning the data
         logger.info("Cleaning the data")
@@ -104,7 +104,8 @@ class ExtractiveSummarizer(Summarizer):
 
         # 7 Generate the summary
         logger.info("Generating summary")
-        summary = self._generate_summary(sentences, sentence_scores, threshold, self._max_length_of_summary)
+        max_length_of_summary = None if max_length is None else max_length
+        summary = self._generate_summary(sentences, sentence_scores, threshold, max_length_of_summary=max_length_of_summary)
         logger.info("Summary is ready to be picked up")
 
         return summary.lstrip().rstrip()
