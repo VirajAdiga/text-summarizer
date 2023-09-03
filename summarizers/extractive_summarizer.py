@@ -99,12 +99,15 @@ class ExtractiveSummarizer(Summarizer):
         logger.info("Finding the threshold")
         threshold = self._find_average_score(sentence_scores)
 
-        # 6 Sorting sentence scores to restrict maximum length of summary
-        sentence_scores = dict(sorted(sentence_scores.items(), key=lambda x: x[1], reverse=True))
-
-        # 7 Generate the summary
+        # 6 Generate the summary
         logger.info("Generating summary")
-        max_length_of_summary = None if max_length is None else max_length
+        if max_length is None:
+            max_length_of_summary = None
+        else:
+            # Sorting sentence scores to restrict maximum length of summary
+            sentence_scores = dict(sorted(sentence_scores.items(), key=lambda x: x[1], reverse=True))
+            max_length_of_summary = max_length
+
         summary = self._generate_summary(sentences, sentence_scores, threshold, max_length_of_summary=max_length_of_summary)
         logger.info("Summary is ready to be picked up")
 
