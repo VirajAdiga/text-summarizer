@@ -1,4 +1,5 @@
 from summarizers.extractive_summarizer import ExtractiveSummarizer
+from summarizers.textrank_summarizer import TextrankSummarizer
 
 
 class SummarizerFactory:
@@ -9,7 +10,8 @@ class SummarizerFactory:
     @staticmethod
     def get_summarizer(summarizer_type):
         summarizer_map = {
-            "extractive": ExtractiveSummarizer
+            "extractive": ExtractiveSummarizer,
+            "textrank": TextrankSummarizer
         }
 
         if summarizer_type not in summarizer_map:
