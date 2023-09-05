@@ -6,14 +6,12 @@ from loguru import logger
 from factories.media_to_text_factory import MediaToTextConverterFactory
 from factories.scraper_factory import ScraperFactory
 from factories.summarizer_factory import SummarizerFactory
-
-
-YOUTUBE_URL_REGEX_PATTERN = r""
+from constants import YOUTUBE_URL_REGEX_PATTERN
 
 
 class Driver:
 
-    def get_summary_of_page(self, url, max_length=None):
+    def get_summary(self, url, max_length=None):
         logger.info(f"Received request for summarising content from '{url}'")
 
         regex_match = re.search(YOUTUBE_URL_REGEX_PATTERN, url)
