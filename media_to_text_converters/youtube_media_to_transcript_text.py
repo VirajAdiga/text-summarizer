@@ -1,6 +1,10 @@
-from loguru import logger
+import re
 
+from loguru import logger
+from youtube_transcript_api import YouTubeTranscriptApi
 from base.media_to_text import MediaToText
+
+from constants import YOUTUBE_URL_REGEX_PATTERN
 
 
 class YoutubeMediaToTranscriptText(MediaToText):
@@ -9,4 +13,19 @@ class YoutubeMediaToTranscriptText(MediaToText):
     """
 
     def get_media_text(self, media_url):
-        pass
+        regex_match = re.search(YOUTUBE_URL_REGEX_PATTERN, media_url)
+        video_id = regex_match.group(1)
+
+        logger.info("Getting transcript data")
+        transcript_data = YouTubeTranscriptApi.get_transcript(video_id)
+
+        logger.info("Generating transcript text with the help of transcript data")
+        transcript_text = ""
+
+        for data in transcript_data:
+            text = data.get('text', None)
+            if text and text != '[Music]':
+                transcript_text += " " + text
+
+        logger.info("Transcript is ready to be picked up")
+        return self._clean_data(transcript_text)
