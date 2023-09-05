@@ -21,6 +21,11 @@ class Driver:
         else:
             logger.info(f"Requested url is a web page")
             extracted_text = self._get_text_from_page(url)
+
+        if extracted_text is None or len(extracted_text) < 1:
+            logger.warning("There is no content to summarize from given url")
+            return None
+
         logger.info(f"This is the full extracted content from the requested web page (Total length of chars: {len(extracted_text)})")
         logger.info(textwrap.fill(extracted_text, width=150))
 
