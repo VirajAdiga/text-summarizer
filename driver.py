@@ -26,12 +26,12 @@ class Driver:
             logger.warning("There is no content to summarize from given url")
             return None
 
-        logger.info(f"This is the full extracted content from the requested web page (Total length of chars: {len(extracted_text)})")
-        logger.info(textwrap.fill(extracted_text, width=150))
+        # logger.info(f"This is the full extracted content from the requested web page (Total length of chars: {len(extracted_text)})")
+        # logger.info(textwrap.fill(extracted_text, width=150))
 
         summarised_content = self._summarize_text(extracted_text, max_length)
-        logger.info(f"This is the summarised content (Total length of chars: {len(summarised_content)})")
-        logger.info(textwrap.fill(summarised_content, width=150))
+        # logger.info(f"This is the summarised content (Total length of chars: {len(summarised_content)})")
+        # logger.info(textwrap.fill(summarised_content, width=150))
         return summarised_content
 
     def _get_media_text(self, media_url):
