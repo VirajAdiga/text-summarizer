@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from driver import Driver
+from loguru import logger
 
 
 BASE_URL = "/api/"
@@ -16,7 +17,8 @@ def get_summary_of_url():
         return jsonify({"message": "Please specify a url"}), 400
     try:
         summary = driver.get_summary(url)
-    except Exception:
+    except Exception as exception:
+        logger.error(f"Error processing: {exception}")
         return jsonify({"message": "Error processing the request"}), 500
     if summary is None:
         return jsonify({"message": "Please specify a valid url"}), 400
